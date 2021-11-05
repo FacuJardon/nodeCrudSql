@@ -4,35 +4,46 @@ import { EmpleadoModel } from '../models/models'
 let empleadoService = new EmpleadoService();
 
 class EmpleadoController {
-    async getEmpleados() {
-        return await empleadoService.getEmpleados();
+    async getEmpleados(req,res) {
+
+        const result = await empleadoService.getEmpleados();
+        return res.json(result);
     }
-    async createEmpleado(body) {
+    async createEmpleado(req,res) {
         try {
-            let empleado = EmpleadoModel.build(body);
-            return await empleadoService.createEmpleado(empleado);
+            let empleado = EmpleadoModel.build(req.body);
+            const empleadoCreado = await empleadoService.createEmpleado(empleado);
+            return res.json(empleadoCreado);
         } catch(err) {
-            return {"error": err};
+            return res.json({"error": err});
         }
     }
-    async deleteEmpleado(body) {
+    async deleteEmpleado(req,res) {
         try {
-            if (body.id == undefined)
-                return {"error": "Ingrese el id de empleado."};
+            const empleadoId = req.params.empleado;
 
-            return await empleadoService.deleteEmpleado(body.id);
+            if (!empleadoId)
+                return res.json({"error": "Ingrese el id de empleado."});
+
+            const countEmpleadoDeleted = await empleadoService.deleteEmpleado(empleadoId);
+            return res.json(countEmpleadoDeleted > 0 ? true : false );
         } catch(err) {
-            return {"error": err};
+            return res.json({"error": err});
         }
     }
-    async updateEmpleado(body) {
+    async updateEmpleado(req,res) {
         try {
-            if (body.id == undefined)
-                return {"error": "Ingrese el id del empleado a modificar."};
+            const empleadoId = req.params.empleado;
+            if (!empleadoId)
+                return res.json({"error": "Ingrese el id del empleado a modificar."});
 
-            return await empleadoService.updateEmpleado(body);
+            const empleado = { id: empleadoId, ...req.body }
+            
+            const empleadoUpdated = await empleadoService.updateEmpleado(empleado);
+            return res.json(empleadoUpdated);
+            
         } catch(err) {
-            return {"error": err};
+            return res.json({"error": err});
         }
     }
 }

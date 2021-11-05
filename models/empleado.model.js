@@ -1,5 +1,4 @@
 import { Model, DataTypes } from 'sequelize';
-// import { DataBaseRepositorie } from '../repositories/repositories';
 import DataBaseRepositorie from '../repositories/dataBase.repositorie';
 let baseRepositorie = new DataBaseRepositorie();
 let seq = baseRepositorie.sequelize;

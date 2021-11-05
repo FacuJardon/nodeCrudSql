@@ -23,7 +23,10 @@ class EmpleadoRepositorie {
             let result = await EmpleadoModel.destroy({where: {id: idEmpleado}});
             
             return result;
-        }catch(err) { return {'error': "'"+ err +"'"};}
+        }catch(err) { 
+            return {'error': "'"+ err +"'"};
+        
+        }
 
     }
     async updateEmpleado(empleado) {
@@ -33,7 +36,6 @@ class EmpleadoRepositorie {
 
         try {
             let result = await EmpleadoModel.update(update, {where: {id: idEmpleado}});
-            
             return result;
         }catch(err) { return {'error': "'"+ err +"'"};}
     }
